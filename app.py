@@ -1,6 +1,6 @@
 """FastAPI Skill Router — sds-lite entry point.
 
-Implements the operational surface of the Suadeo SDS AI architecture
+Implements the operational surface of the Skill Router AI architecture
 (Doc §8.3) as a FastAPI app:
 
     POST /chat             → Run the 9-step pipeline on a user prompt   (Doc §2)
@@ -86,7 +86,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="sds-lite",
-    description="Python implementation mirroring the Suadeo SDS AI Architecture",
+    description="Python implementation mirroring the Skill Router AI Architecture",
     version="0.1.0",
     lifespan=lifespan,
 )
@@ -164,7 +164,7 @@ async def list_skills():
 
 @app.post("/skills/reload")
 async def reload_skills():
-    """Hot reload — the Suadeo 'golden rule' from Doc §3.3."""
+    """Hot reload — the platform 'golden rule' from Doc §3.3."""
     if not skill_registry:
         raise HTTPException(status_code=503, detail="Skill registry not initialised")
     count = skill_registry.reload()

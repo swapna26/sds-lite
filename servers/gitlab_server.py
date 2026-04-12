@@ -1,7 +1,7 @@
 """Mock GitLab MCP Server — for Doc §7.2 daily code analysis use case.
 
 In production this would be the real Atlassian/GitLab MCP servers referenced
-in Doc §6.3. Here we expose a tiny mock so the suadeo-code-review skill runs
+in Doc §6.3. Here we expose a tiny mock so the code-review skill runs
 end-to-end during learning.
 
 Run standalone:  uv run servers/gitlab_server.py
@@ -21,21 +21,21 @@ _BASE = datetime.now() - timedelta(hours=6)
 _COMMITS = [
     {
         "sha": "a1b2c3d",
-        "author": "alice@suadeo.com",
+        "author": "alice@example.com",
         "message": "feat(auth): add OAuth2 device flow",
         "project": "sds-core",
         "created_at": (_BASE + timedelta(hours=1)).isoformat(),
     },
     {
         "sha": "e4f5g6h",
-        "author": "bob@suadeo.com",
+        "author": "bob@example.com",
         "message": "fix(query): prevent SQL injection in dataset filter",
         "project": "sds-core",
         "created_at": (_BASE + timedelta(hours=2)).isoformat(),
     },
     {
         "sha": "i7j8k9l",
-        "author": "carol@suadeo.com",
+        "author": "carol@example.com",
         "message": "refactor(dashboard): extract chart rendering helper",
         "project": "sds-frontend",
         "created_at": (_BASE + timedelta(hours=3)).isoformat(),

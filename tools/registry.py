@@ -1,13 +1,13 @@
 """Tool Registry — glue between SKILL.md tool names and LangChain tools.
 
 Produces a dict { qualified_name -> StructuredTool } where:
-  - MCP server tools are namespaced:  'suadeo.get_schema', 'gitlab.get_commits'
+  - MCP server tools are namespaced:  'platform.get_schema', 'gitlab.get_commits'
   - Agent tools use their bare name:  'web_search', 'analyze_code_quality'
   - Gateway tools are exposed as:     'mcp_list_tools', 'mcp_call', 'mcp_register'
 
 SKILL.md files reference tools using exactly these qualified names. The
 executor filters `all_tools` down to `skill.tools` before binding them to the
-LLM, which implements the per-skill allowlist the Suadeo doc prescribes.
+LLM, which implements the per-skill allowlist the architecture doc prescribes.
 """
 
 from __future__ import annotations
@@ -191,7 +191,7 @@ class ToolRegistry:
     """Holds every tool known to the Skill Router, indexed by qualified name.
 
     Qualified naming convention (matches SKILL.md files):
-      - MCP server tool:  'suadeo.get_schema'
+      - MCP server tool:  'platform.get_schema'
       - Agent tool:       'web_search'
       - Gateway:          'mcp_call'
     """
@@ -219,9 +219,9 @@ class ToolRegistry:
         # 3. MCP server tools — namespaced
         for gt in self.gateway.all_tools():
             lc_tool = _mcp_tool_to_structured(self.gateway, gt)
-            qualified = gt.qualified_name  # 'suadeo.get_schema'
+            qualified = gt.qualified_name  # 'platform.get_schema'
             self.tools[qualified] = lc_tool
-            self.qualified_to_lc[qualified] = lc_tool.name       # 'suadeo__get_schema'
+            self.qualified_to_lc[qualified] = lc_tool.name       # 'platform__get_schema'
             self.lc_to_qualified[lc_tool.name] = qualified
 
         logger.info("[registry] %d tools registered", len(self.tools))
@@ -229,7 +229,7 @@ class ToolRegistry:
     def select(self, allowed_qualified_names: list[str]) -> list[StructuredTool]:
         """Return the subset of tools whose qualified name is in the allowlist.
 
-        This enforces the per-skill tool filtering prescribed by the Suadeo doc.
+        This enforces the per-skill tool filtering prescribed by the architecture doc.
         """
         selected = []
         for name in allowed_qualified_names:

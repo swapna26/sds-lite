@@ -1,7 +1,7 @@
 """Skill Classifier — Step ② (Doc §2).
 
 A lightweight LLM call that compares the user prompt against every SKILL.md
-description and picks the best match. The Suadeo doc specifies a threshold
+description and picks the best match. The architecture doc specifies a threshold
 of score ≥ 0.7; below that we fall back to a default skill.
 """
 
@@ -16,7 +16,7 @@ from .skill_loader import SkillRegistry
 logger = logging.getLogger(__name__)
 
 FALLBACK_THRESHOLD = 0.7  # Doc §2 row ②
-FALLBACK_SKILL = "suadeo-catalogue"  # Safe default — searches the catalogue
+FALLBACK_SKILL = "catalogue"  # Safe default — searches the catalogue
 
 
 class ClassifierOutput(BaseModel):
@@ -45,7 +45,7 @@ def classify(llm, prompt: str, registry: SkillRegistry) -> ClassificationResult:
 
     # Build system prompt listing every skill name + description
     lines = [
-        "You are the Skill Classifier of the Suadeo SDS AI.",
+        "You are the Skill Classifier of the Skill Router AI.",
         "Given a user prompt, choose the single most relevant skill from the list below.",
         "Return a confidence score between 0.0 and 1.0.",
         "",

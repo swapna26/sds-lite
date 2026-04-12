@@ -1,20 +1,17 @@
-"""Suadeo SDS MCP Server — Doc §5.
+"""Platform MCP Server — 15 data platform tools.
 
-Exposes the 15 Suadeo platform tools via the open Model Context Protocol
-standard. In the Suadeo doc this server is written in C# .NET 10 with the
-official Microsoft MCP SDK (§5.2). Here we use Python FastMCP so the
-learning project stays single-language. Tool names, descriptions and
-behaviours match the document 1:1.
+Exposes catalogue, ETL, dashboard, governance and document generation tools
+via the open Model Context Protocol standard using Python FastMCP.
 
-Run standalone:  uv run servers/suadeo_sds_server.py
+Run standalone:  uv run servers/platform_server.py
 
-Tool families (Doc §5.3):
-  §5.3.1 Catalogue & data        : search_catalogue, get_schema, execute_query,
-                                    get_sample_data, get_lineage
-  §5.3.2 ETL & dashboards        : create_pipeline, get_pipeline_status,
-                                    create_dashboard, list_dashboards, run_profiling
-  §5.3.3 Governance & documents  : get_governance, generate_word, generate_excel,
-                                    generate_fake_data, get_user_context
+Tool families:
+  Catalogue & data        : search_catalogue, get_schema, execute_query,
+                            get_sample_data, get_lineage
+  ETL & dashboards        : create_pipeline, get_pipeline_status,
+                            create_dashboard, list_dashboards, run_profiling
+  Governance & documents  : get_governance, generate_word, generate_excel,
+                            generate_fake_data, get_user_context
 """
 
 from __future__ import annotations
@@ -37,7 +34,7 @@ from assemblers.word_assembler import build_word_report  # noqa: E402
 from assemblers.excel_assembler import build_excel_workbook  # noqa: E402
 from assemblers.dashboard_assembler import validate_and_save_dashboard  # noqa: E402
 
-mcp = FastMCP("Suadeo SDS")
+mcp = FastMCP("Data Platform")
 
 MOCK_DIR = Path(__file__).parent.parent / "mock_data"
 DATASETS = json.loads((MOCK_DIR / "datasets.json").read_text())["datasets"]
@@ -51,12 +48,12 @@ _PROFILING_JOBS: dict[str, dict] = {}
 
 
 # =============================================================================
-# §5.3.1 — Catalogue & data (5 tools)
+# Catalogue & data (5 tools)
 # =============================================================================
 
 @mcp.tool()
 def search_catalogue(query: str, limit: int = 10) -> str:
-    """Search datasets and assets in the Suadeo SDS catalogue.
+    """Search datasets and assets in the platform catalogue.
     Returns name, type, description, key, owner."""
     q = (query or "").lower()
     matches = [
@@ -142,7 +139,7 @@ def get_lineage(key: str) -> str:
 
 
 # =============================================================================
-# §5.3.2 — ETL & dashboards (5 tools)
+# ETL & dashboards (5 tools)
 # =============================================================================
 
 @mcp.tool()
@@ -185,7 +182,7 @@ def create_dashboard(dashboard: dict) -> str:
     _DASHBOARDS[dashboard_id] = dashboard
     return json.dumps({
         "dashboard_id": dashboard_id,
-        "url": f"https://sds.suadeo.com/dashboards/{dashboard_id}",
+        "url": f"https://platform.example.com/dashboards/{dashboard_id}",
         "file": path,
     })
 
@@ -218,7 +215,7 @@ def run_profiling(dataset_key: str) -> str:
 
 
 # =============================================================================
-# §5.3.3 — Governance & document generation (5 tools)
+# Governance & document generation (5 tools)
 # =============================================================================
 
 @mcp.tool()
@@ -229,7 +226,7 @@ def get_governance(key: str) -> str:
         "dataset_key": key,
         "certified": True,
         "certification_level": "gold",
-        "owners": ["data.governance@suadeo.com"],
+        "owners": ["data.governance@example.com"],
         "compliance": ["GDPR", "SOC2"],
         "access_rights": ["finance.team", "executive.board"],
     })
@@ -238,7 +235,7 @@ def get_governance(key: str) -> str:
 @mcp.tool()
 def generate_word(content: dict) -> str:
     """Generates a structured .docx report from a JSON content definition
-    (DocumentFormat.OpenXml → python-docx in this lite version)."""
+    using python-docx."""
     file_path = build_word_report(content)
     return json.dumps({"file_path": file_path, "format": "docx"})
 
@@ -246,7 +243,7 @@ def generate_word(content: dict) -> str:
 @mcp.tool()
 def generate_excel(content: dict) -> str:
     """Generates an .xlsx workbook with data, formulas, and charts
-    (ClosedXML → openpyxl in this lite version)."""
+    using openpyxl."""
     file_path = build_excel_workbook(content)
     return json.dumps({"file_path": file_path, "format": "xlsx"})
 
@@ -272,7 +269,7 @@ def get_user_context() -> str:
     return json.dumps({
         "user_id": "u_demo_001",
         "name": "Demo User",
-        "email": "demo.user@suadeo.com",
+        "email": "demo.user@example.com",
         "roles": ["analyst", "report_author"],
         "workspaces": ["finance", "hr"],
         "dataset_rights": {

@@ -1,6 +1,6 @@
 """web_search — Doc §4.2 agent tool.
 
-Real-time web search. The Suadeo doc mentions SerpAPI / Brave Search. For
+Real-time web search. The architecture doc mentions SerpAPI / Brave Search. For
 learning we use DuckDuckGo which requires no API key and matches the pattern
 already used in langgraph-mcp-agent/servers/web_rag_server.py.
 """

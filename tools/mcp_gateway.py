@@ -1,12 +1,12 @@
 """MCP Gateway — Doc §6.
 
-The universal connector to any registered MCP server. In the Suadeo document
+The universal connector to any registered MCP server. In the architecture document
 this is a trio of tools:
     mcp_list_tools(server)      — discover tools on a registered server
     mcp_call(server, tool, args) — execute a tool on any server
     mcp_register(name, url, auth) — add a new server at runtime
 
-The Suadeo doc uses HTTP transport for MCP; we support both HTTP (via httpx)
+The architecture doc uses HTTP transport for MCP; we support both HTTP (via httpx)
 and stdio (via the MCP Python client) selected per registry entry. The public
 function signatures mirror Doc §6.4 exactly.
 
@@ -54,7 +54,7 @@ class GatewayTool:
     """A tool discovered on a remote MCP server, namespaced as 'server.tool'."""
     server: str
     name: str                  # bare MCP tool name, e.g. 'get_schema'
-    qualified_name: str        # 'suadeo.get_schema'
+    qualified_name: str        # 'platform.get_schema'
     description: str
     input_schema: dict
 

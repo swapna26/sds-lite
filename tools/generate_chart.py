@@ -1,7 +1,7 @@
 """generate_chart — Doc §4.2 agent tool.
 
 Generates Plotly/Chart.js JSON from tabular data. Rendered client-side in the
-Suadeo frontend. Here we return a minimal Plotly-compatible JSON structure.
+Platform frontend. Here we return a minimal Plotly-compatible JSON structure.
 """
 
 from __future__ import annotations

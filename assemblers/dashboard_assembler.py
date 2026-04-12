@@ -1,7 +1,7 @@
 """Dashboard Assembler — Step ⑧ for DevExpress-style dashboard JSON.
 
 Validates structure and persists the JSON under outputs/. Mirrors the
-suadeo.create_dashboard contract from Doc §5.3.2.
+platform.create_dashboard contract from Doc §5.3.2.
 """
 
 from __future__ import annotations

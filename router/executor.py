@@ -52,7 +52,7 @@ async def run_pipeline(
     skill_registry: SkillRegistry,
     tool_registry: ToolRegistry,
 ) -> dict:
-    """Run the full 9-step Suadeo flow for a user prompt.
+    """Run the full 9-step Platform flow for a user prompt.
 
     Returns a dict shaped for the FastAPI response:
         {answer, audit, skill, classifier_reasoning, files?}
@@ -186,7 +186,7 @@ async def run_pipeline(
 def _build_system_prompt(skill: Skill) -> str:
     """Doc §2 step ③ — inject the SKILL.md body as the system prompt."""
     return (
-        f"You are executing the '{skill.name}' skill of the Suadeo SDS AI.\n"
+        f"You are executing the '{skill.name}' skill of the Skill Router AI.\n"
         f"Description: {skill.description}\n\n"
         f"You MUST follow the instructions below:\n\n"
         f"{skill.body}\n\n"

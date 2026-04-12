@@ -5,7 +5,7 @@
       "name": "Sales Q1 2026",
       "type": "dataset",
       "description": "Q1 2026 sales aggregated by region, product and month",
-      "owner": "finance.team@suadeo.com",
+      "owner": "finance.team@example.com",
       "tags": ["sales", "finance", "2026", "q1"]
     },
     {
@@ -13,7 +13,7 @@
       "name": "HR Headcount",
       "type": "dataset",
       "description": "Employee headcount by department, location and seniority",
-      "owner": "hr.team@suadeo.com",
+      "owner": "hr.team@example.com",
       "tags": ["hr", "headcount", "people"]
     },
     {
@@ -21,7 +21,7 @@
       "name": "Customer Master List",
       "type": "dataset",
       "description": "All active customers with contact info and account status",
-      "owner": "crm.team@suadeo.com",
+      "owner": "crm.team@example.com",
       "tags": ["crm", "customers", "master"]
     }
   ]

@@ -1,6 +1,6 @@
 """Excel Assembler — Step ⑧ for Excel deliverables.
 
-In the Suadeo doc (§5.3.3) this is ClosedXML in C#. Here: openpyxl.
+In the architecture doc (§5.3.3) this is ClosedXML in C#. Here: openpyxl.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ def build_excel_workbook(content: dict[str, Any]) -> str:
     wb = Workbook()
     wb.remove(wb.active)
 
-    title = content.get("title", "Suadeo_Export")
+    title = content.get("title", "Platform_Export")
 
     for sheet_def in content.get("sheets", []):
         name = sheet_def.get("name", "Sheet")[:31]  # Excel sheet name limit
