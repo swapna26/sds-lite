@@ -1,0 +1,30 @@
+{
+  "sales_q1_2026": {
+    "columns": [
+      {"name": "region",       "type": "string",  "nullable": false, "description": "Sales region (EMEA, APAC, AMER)"},
+      {"name": "product",      "type": "string",  "nullable": false, "description": "Product family name"},
+      {"name": "month",        "type": "date",    "nullable": false, "description": "First day of the month"},
+      {"name": "revenue_eur",  "type": "decimal", "nullable": false, "description": "Revenue in EUR"},
+      {"name": "units_sold",   "type": "integer", "nullable": false, "description": "Units sold"},
+      {"name": "sales_rep",    "type": "string",  "nullable": true,  "description": "Assigned sales representative"}
+    ]
+  },
+  "hr_headcount": {
+    "columns": [
+      {"name": "department",   "type": "string",  "nullable": false, "description": "Department name"},
+      {"name": "location",     "type": "string",  "nullable": false, "description": "Office location"},
+      {"name": "seniority",    "type": "string",  "nullable": false, "description": "Junior / Mid / Senior / Lead"},
+      {"name": "headcount",    "type": "integer", "nullable": false, "description": "Number of employees"},
+      {"name": "avg_tenure",   "type": "decimal", "nullable": true,  "description": "Average tenure in years"}
+    ]
+  },
+  "customer_list": {
+    "columns": [
+      {"name": "customer_id",  "type": "string",  "nullable": false, "description": "Unique customer identifier"},
+      {"name": "company_name", "type": "string",  "nullable": false, "description": "Company legal name"},
+      {"name": "country",      "type": "string",  "nullable": false, "description": "ISO country code"},
+      {"name": "segment",      "type": "string",  "nullable": false, "description": "SMB / Mid-Market / Enterprise"},
+      {"name": "status",       "type": "string",  "nullable": false, "description": "active / churned / prospect"}
+    ]
+  }
+}

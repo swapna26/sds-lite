@@ -1,0 +1,28 @@
+{
+  "sales_q1_2026": [
+    {"region": "EMEA", "product": "Analytics Suite", "month": "2026-01-01", "revenue_eur": 182500.00, "units_sold": 73,  "sales_rep": "Alice Martin"},
+    {"region": "EMEA", "product": "Data Platform",   "month": "2026-01-01", "revenue_eur": 415200.00, "units_sold": 12,  "sales_rep": "Alice Martin"},
+    {"region": "APAC", "product": "Analytics Suite", "month": "2026-01-01", "revenue_eur":  97300.00, "units_sold": 41,  "sales_rep": "Kenji Sato"},
+    {"region": "AMER", "product": "Data Platform",   "month": "2026-01-01", "revenue_eur": 623800.00, "units_sold": 19,  "sales_rep": "John Ruiz"},
+    {"region": "EMEA", "product": "Analytics Suite", "month": "2026-02-01", "revenue_eur": 201400.00, "units_sold": 82,  "sales_rep": "Alice Martin"},
+    {"region": "APAC", "product": "Data Platform",   "month": "2026-02-01", "revenue_eur": 298100.00, "units_sold":  9,  "sales_rep": "Kenji Sato"},
+    {"region": "AMER", "product": "Analytics Suite", "month": "2026-02-01", "revenue_eur": 345700.00, "units_sold": 140, "sales_rep": "John Ruiz"},
+    {"region": "EMEA", "product": "Data Platform",   "month": "2026-03-01", "revenue_eur": 502300.00, "units_sold": 15,  "sales_rep": "Alice Martin"},
+    {"region": "APAC", "product": "Analytics Suite", "month": "2026-03-01", "revenue_eur": 119200.00, "units_sold": 48,  "sales_rep": "Kenji Sato"},
+    {"region": "AMER", "product": "Data Platform",   "month": "2026-03-01", "revenue_eur": 711500.00, "units_sold": 22,  "sales_rep": "John Ruiz"}
+  ],
+  "hr_headcount": [
+    {"department": "Engineering", "location": "Paris",     "seniority": "Senior", "headcount": 42, "avg_tenure": 4.2},
+    {"department": "Engineering", "location": "Paris",     "seniority": "Mid",    "headcount": 38, "avg_tenure": 2.1},
+    {"department": "Engineering", "location": "Bangalore", "seniority": "Mid",    "headcount": 55, "avg_tenure": 1.8},
+    {"department": "Sales",       "location": "New York",  "seniority": "Senior", "headcount": 18, "avg_tenure": 5.5},
+    {"department": "HR",          "location": "Paris",     "seniority": "Mid",    "headcount":  9, "avg_tenure": 3.7}
+  ],
+  "customer_list": [
+    {"customer_id": "C001", "company_name": "Acme Corp",      "country": "US", "segment": "Enterprise",  "status": "active"},
+    {"customer_id": "C002", "company_name": "Globex Ltd",     "country": "UK", "segment": "Mid-Market",  "status": "active"},
+    {"customer_id": "C003", "company_name": "Initech",        "country": "US", "segment": "SMB",         "status": "churned"},
+    {"customer_id": "C004", "company_name": "Umbrella Group", "country": "DE", "segment": "Enterprise",  "status": "active"},
+    {"customer_id": "C005", "company_name": "Hooli",          "country": "US", "segment": "Enterprise",  "status": "prospect"}
+  ]
+}

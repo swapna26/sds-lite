@@ -1,0 +1,28 @@
+{
+  "datasets": [
+    {
+      "key": "sales_q1_2026",
+      "name": "Sales Q1 2026",
+      "type": "dataset",
+      "description": "Q1 2026 sales aggregated by region, product and month",
+      "owner": "finance.team@suadeo.com",
+      "tags": ["sales", "finance", "2026", "q1"]
+    },
+    {
+      "key": "hr_headcount",
+      "name": "HR Headcount",
+      "type": "dataset",
+      "description": "Employee headcount by department, location and seniority",
+      "owner": "hr.team@suadeo.com",
+      "tags": ["hr", "headcount", "people"]
+    },
+    {
+      "key": "customer_list",
+      "name": "Customer Master List",
+      "type": "dataset",
+      "description": "All active customers with contact info and account status",
+      "owner": "crm.team@suadeo.com",
+      "tags": ["crm", "customers", "master"]
+    }
+  ]
+}

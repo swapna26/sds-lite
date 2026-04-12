@@ -1,0 +1,20 @@
+[project]
+name = "sds-lite"
+version = "0.1.0"
+description = "Python implementation mirroring the Suadeo SDS AI Architecture"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.26.0",
+    "langchain>=0.3.24",
+    "langchain-google-genai>=2.1.0",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.34.0",
+    "python-frontmatter>=1.1.0",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.28.0",
+    "duckduckgo-search>=7.0.0",
+    "python-docx>=1.1.0",
+    "openpyxl>=3.1.0",
+    "pypdf>=5.0.0",
+    "pydantic>=2.0.0",
+]

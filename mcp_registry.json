@@ -1,0 +1,16 @@
+{
+  "servers": {
+    "suadeo": {
+      "transport": "stdio",
+      "command": "uv",
+      "args": ["run", "servers/suadeo_sds_server.py"],
+      "description": "Suadeo SDS — data, ETL, dashboards, governance (15 tools)"
+    },
+    "gitlab": {
+      "transport": "stdio",
+      "command": "uv",
+      "args": ["run", "servers/gitlab_server.py"],
+      "description": "Mock GitLab MCP server — commits, diffs (for use case §7.2)"
+    }
+  }
+}
