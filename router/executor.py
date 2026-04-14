@@ -17,7 +17,7 @@ import logging
 import os
 import time
 
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
 
@@ -89,60 +89,62 @@ async def run_pipeline(
     else:
         llm_with_tools = llm
 
-    try:
-        response = await llm_with_tools.ainvoke(messages)
-    except Exception as e:
-        logger.exception("[④ plan] LLM call failed: %s", e)
-        return _error_response(skill, classification, str(e), t0)
-
-    tool_calls = getattr(response, "tool_calls", []) or []
-    logger.info("[④ plan]   LLM planned %d tool calls", len(tool_calls))
-
-    # ⑤ Tool execution — parallel
+    # ④–⑥ Multi-turn tool-calling loop
+    # Gemini often plans ONE tool at a time. We loop until the LLM produces
+    # a final text answer with no more tool calls (max 10 iterations).
+    MAX_ITERATIONS = 10
     tools_called: list[str] = []
-    tool_results: list[tuple[str, str]] = []  # (lc_name, text)
-    if tool_calls:
+    tool_results: list[tuple[str, str]] = []
+    answer = ""
+
+    for iteration in range(MAX_ITERATIONS):
+        try:
+            response = await llm_with_tools.ainvoke(messages)
+        except Exception as e:
+            logger.exception("[④ plan] LLM call failed (iter %d): %s", iteration, e)
+            return _error_response(skill, classification, str(e), t0)
+
+        tool_calls = getattr(response, "tool_calls", []) or []
+        logger.info("[④ plan]   iteration %d — %d tool calls, content=%s",
+                    iteration, len(tool_calls),
+                    "yes" if response.content else "no")
+
+        if not tool_calls:
+            # LLM is done — it produced a final answer
+            answer = _extract_text(response.content)
+            break
+
+        # ⑤ Execute the requested tools in parallel
+        messages.append(response)  # add the AI message with tool_calls
+
         coros = []
+        call_names = []
         for call in tool_calls:
             lc_name = call["name"]
             args = call.get("args", {}) or {}
             qualified = tool_registry.lookup_qualified(lc_name)
             tools_called.append(qualified)
+            call_names.append((call.get("id", lc_name), lc_name))
             logger.info("[⑤ exec]   %s(%s)", qualified, _short(args))
             coros.append(_invoke_tool(tool_registry, lc_name, args))
 
         raw_results = await asyncio.gather(*coros, return_exceptions=True)
-        for (call, raw) in zip(tool_calls, raw_results):
-            lc_name = call["name"]
+
+        # Feed each result back as a ToolMessage so the LLM can continue
+        for (call_id, lc_name), raw in zip(call_names, raw_results):
             qualified = tool_registry.lookup_qualified(lc_name)
             if isinstance(raw, Exception):
-                tool_results.append((qualified, json.dumps({"error": str(raw)})))
+                result_text = json.dumps({"error": str(raw)})
             else:
-                tool_results.append((qualified, str(raw)))
+                result_text = str(raw)
+            tool_results.append((qualified, result_text))
+            messages.append(ToolMessage(content=result_text, tool_call_id=call_id))
 
-    # ⑥ Aggregation — feed tool results back to LLM for final answer
-    if tool_results:
-        logger.info("[⑥ aggregate] merging %d tool results", len(tool_results))
-        aggregation_context = "\n\n".join(
-            f"## Tool: {name}\n{result}" for name, result in tool_results
-        )
-        messages.extend([
-            AIMessage(content=response.content or "(planned tool calls)"),
-            HumanMessage(content=(
-                f"Here are the results of the tool calls you requested:\n\n"
-                f"{aggregation_context}\n\n"
-                f"Please write the final response for the user based on these results. "
-                f"Follow the instructions and output format rules from your system prompt."
-            )),
-        ])
-        try:
-            final = await llm.ainvoke(messages)
-            answer = final.content
-        except Exception as e:
-            logger.exception("[⑥ aggregate] follow-up LLM failed: %s", e)
-            answer = f"(aggregation failed: {e})"
+        logger.info("[⑥ aggregate] fed %d tool results back to LLM", len(tool_calls))
     else:
-        answer = response.content or "(no content)"
+        # Hit max iterations — take whatever content the last response had
+        answer = _extract_text(response.content) or "(max tool iterations reached)"
+        logger.warning("[④ plan] hit MAX_ITERATIONS=%d", MAX_ITERATIONS)
 
     # ⑦ Structured generation — we do not enforce a schema here because we
     #    already pass the skill's expected format via the system prompt. An
@@ -182,6 +184,25 @@ async def run_pipeline(
 # -----------------------------------------------------------------------------
 # Helpers
 # -----------------------------------------------------------------------------
+
+def _extract_text(content) -> str:
+    """Extract plain text from LLM response content.
+
+    Gemini sometimes returns content as a list of blocks like
+    [{'type': 'text', 'text': '...'}] instead of a plain string.
+    """
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for block in content:
+            if isinstance(block, dict) and "text" in block:
+                parts.append(block["text"])
+            elif isinstance(block, str):
+                parts.append(block)
+        return "\n".join(parts) if parts else ""
+    return str(content) if content else ""
+
 
 def _build_system_prompt(skill: Skill) -> str:
     """Doc §2 step ③ — inject the SKILL.md body as the system prompt."""
